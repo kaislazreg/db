@@ -9,6 +9,8 @@ const contactSchema = mongoose.Schema({
         type:String,
         required:true,
         unique:true,
+        
     }
-})
+    
+}, {timestamps:true})
 module.exports = mongoose.model('Connect',contactSchema)

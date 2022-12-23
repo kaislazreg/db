@@ -1,4 +1,5 @@
 const express = require('express')
+const cors = require ('cors')
 
 const connectdb = require('./configue/connectdb')
 
@@ -11,7 +12,8 @@ const port = 4005
 
 //tawa rbatna server mta3na bl db
 connectdb()
-
+ 
+app.use(cors())
 
 //tawa bch na3mlou fazet json li bch na3mlou beha lmsg mba3d f blaset .send
 app.use(express.json())

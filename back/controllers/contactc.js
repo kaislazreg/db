@@ -6,12 +6,13 @@ const conRouter = require('../routes/contactr')
 const getting = async(req,res)=>{
 
     try{
-        const ajoutlist = await contactSchema.find()
-        res.status(200).send({msg:"hedhi list mta3ek",ajoutlist})
+        const contactList = await contactSchema.find({},'-updatedAt -createdAt -__v').sort({updatedAt:-1})
+        res.status(200).send({message:"hedhi list mta3ek",contactList})
 
+        
     }catch(err){
 
-        res.status(400).send({msg:"matnajemch tchouf lista barra thabet f 5edmtak ya msatek"})
+        res.status(500).json({error: err.message})
 
     }
 }
@@ -20,8 +21,9 @@ const getting = async(req,res)=>{
 
 const posting = async(req,res)=>{
     try{
-
-        const newcontact = await new contactSchema(req.body)
+        let body= req.body
+        body["name"]=body["name"][0].toUpperCase() + body["name"].slice(1);
+        const newcontact = await new contactSchema(body)
         newcontact.save()
         res.status(200).send({msg:'contact added',newcontact})
 
@@ -51,25 +53,20 @@ const putting = async(req,res)=>{
 
     try{
         const {id} = req.params
-        const baddeluser = await contactSchema.findByIdAndUpdate(id,{$set:{...req.body}})
-        res.status(200).send({msg:"c bn tbaddel",baddeluser})
-
-
-
+        await contactSchema.findByIdAndUpdate(id,{$set:{...req.body}})
+        const updated_item= await contactSchema.findById(id)
+        res.status(200).json({message:'contact successfully uptated', item:updated_item})
     }catch(err){
-
-        send.status(500).send({msg:"matbadel chey"})
-
+        res.status(500).send({error: err.message})
     }
     
 }
 
 const addeingone = async(req,res)=>{
-
     try{
         const {id} = req.params
-        const jibwahed = await contactSchema.findById (id)
-        res.status(200).send({msg:"hak jit wa7dek",jibwahed})
+        const oneContact = await contactSchema.findById (id)
+        res.status(200).send({msg:"hak jit wa7dek",oneContact})
 
 
 
